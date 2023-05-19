@@ -80,6 +80,11 @@ function _install_packages
     postfix-pcre postfix-policyd-spf-python postsrsd
   )
 
+  CADDY_PACKAGES=(
+    debian-keyring debian-archive-keyring 
+    apt-transport-https
+  )
+
   MAIL_PROGRAMS_PACKAGES=(
     fetchmail opendkim opendkim-tools
     opendmarc libsasl2-modules sasl2-bin
@@ -90,6 +95,7 @@ function _install_packages
     "${CODECS_PACKAGES[@]}" \
     "${MISCELLANEOUS_PACKAGES[@]}" \
     "${POSTFIX_PACKAGES[@]}" \
+    "${CADDY_PACKAGES[@]}" \
     "${MAIL_PROGRAMS_PACKAGES[@]}"
 }
 
@@ -201,6 +207,20 @@ function _install_fail2ban
   sedfile -i -r 's/^_nft_add_set = .+/_nft_add_set = <nftables> add set <table_family> <table> <addr_set> \\{ type <addr_type>\\; flags interval\\; \\}/' /etc/fail2ban/action.d/nftables.conf
 }
 
+function _install_caddy
+{
+  _log 'debug' 'Installing Caddy Server'
+
+  #WIP
+  curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
+  curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | tee /etc/apt/sources.list.d/caddy-stable.list
+
+  apt-get "${QUIET}" update
+  apt-get "${QUIET}" --no-install-recommends install caddy
+}
+
+
+
 function _remove_data_after_package_installations
 {
   _log 'debug' 'Deleting sensitive files (secrets)'
@@ -225,5 +245,6 @@ _install_packages
 _install_dovecot
 _install_rspamd
 _install_fail2ban
+_install_caddy
 _remove_data_after_package_installations
 _post_installation_steps

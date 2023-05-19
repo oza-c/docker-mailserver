@@ -94,6 +94,12 @@ function _register_functions
   _register_setup_function '_setup_fetchmail'
   _register_setup_function '_setup_fetchmail_parallel'
 
+  if [[ ${ENABLE_API} -eq 1  ]]
+  then
+    _register_setup_function '_setup_caddy'
+    _register_start_daemon '_start_daemon_caddy'
+  fi
+
   # needs to come after _setup_postfix_early
   _register_setup_function '_setup_spoof_protection'
 

@@ -48,6 +48,9 @@ function _start_daemon_rspamd_redis   { _default_start_daemon 'rspamd-redis'   ;
 function _start_daemon_rsyslog        { _default_start_daemon 'rsyslog'        ; }
 function _start_daemon_update_check   { _default_start_daemon 'update-check'   ; }
 
+#WIP
+function _start_daemon_caddy          { _default_start_daemon 'caddy'          ; }
+
 function _start_daemon_saslauthd
 {
   _default_start_daemon "saslauthd_${SASLAUTHD_MECHANISMS}"
