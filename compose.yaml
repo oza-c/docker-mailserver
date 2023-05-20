@@ -14,6 +14,8 @@ services:
       - "465:465"  # ESMTP (implicit TLS)
       - "587:587"  # ESMTP (explicit TLS => STARTTLS)
       - "993:993"  # IMAP4 (implicit TLS)
+      - "80:80"    # CADDY (Http)
+      - "443:443"  # CADDY (Https)   
     volumes:
       - ./docker-data/dms/mail-data/:/var/mail/
       - ./docker-data/dms/mail-state/:/var/mail-state/
